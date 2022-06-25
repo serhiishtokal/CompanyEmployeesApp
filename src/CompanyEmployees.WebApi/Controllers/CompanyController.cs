@@ -44,7 +44,7 @@ namespace CompanyEmployeesApp.Controllers
             }
         }
 
-        [HttpPost()]
+        [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] CompanyDto company)
         {
             try
@@ -58,7 +58,7 @@ namespace CompanyEmployeesApp.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("update/{id}")]
         public async Task<IActionResult> Update([FromBody] CompanyDto company, long id)
         {
             try
@@ -76,7 +76,7 @@ namespace CompanyEmployeesApp.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(long id)
         {
             try
