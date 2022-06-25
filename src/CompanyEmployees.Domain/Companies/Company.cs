@@ -11,7 +11,7 @@
             Name = name;
             EstablishmentYear = establishmentYear;
         }
-        // todo add methods to set & validation
+        
         protected Company()
         {
         }

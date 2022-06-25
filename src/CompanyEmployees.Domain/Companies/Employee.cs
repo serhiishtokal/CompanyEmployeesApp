@@ -10,7 +10,7 @@ namespace CompanyEmployees.Domain
 
         public long CompanyId { get; set; }
         public Company? Company { get; set; }
-        // todo move to fluent api
+        
         public Employee(string firstName, string lastName, DateTime dateOfBirth, JobType jobTitle)
         {
             FirstName = firstName;

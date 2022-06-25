@@ -35,7 +35,6 @@ namespace CompanyEmployees.Infrastructure.Repositories
 
         public async Task<IEnumerable<Company>> GetAsync(CompanyFilter companyFilter)
         {
-            // todo Optimize 
             var companies = await _companySet.AsNoTracking()
                 .Include(x => x.Employees)
                 .FilterForKeyWord(companyFilter.Keyword)
