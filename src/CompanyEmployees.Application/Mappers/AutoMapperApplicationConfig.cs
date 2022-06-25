@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CompanyEmployees.Application.DTOs;
 using CompanyEmployees.Domain;
+using CompanyEmployees.Domain.Repositories;
 
 namespace CompanyEmployees.Application.Mappers
 {
@@ -13,6 +14,8 @@ namespace CompanyEmployees.Application.Mappers
 
             CreateMap<EmployeeDto, Employee>();
             CreateMap<Employee, EmployeeDto>();
+
+            CreateMap<CompanyFilterDto, CompanyFilter>();
         }
     }
 }

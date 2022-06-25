@@ -1,18 +1,22 @@
-﻿using Autofac;
-using CompanyEmployeesApplication.Commands.Companies.Create;
-using CompanyEmployeesApplication.Queries.Companies.Get;
+﻿
+
+using Autofac;
+using MediatR;
+using System.Reflection;
 
 namespace CompanyEmployeesApplication
 {
-    public class AppModule : Module
+    public class AppModule : Autofac.Module
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<GetCompanyQuery>().AsImplementedInterfaces();
-            builder.RegisterType<GetProductQueryHandler>().AsImplementedInterfaces();
+            Assembly assembly = typeof(AppModule)
+                .GetTypeInfo()
+                .Assembly;
 
-            builder.RegisterType<AddCompanyCommand>().AsImplementedInterfaces();
-            builder.RegisterType<AddCompanyCommandHandler>().AsImplementedInterfaces();
+            builder.RegisterAssemblyTypes(assembly)
+                .AsClosedTypesOf(typeof(IRequestHandler<,>))
+                .AsImplementedInterfaces();
         }
     }
 }

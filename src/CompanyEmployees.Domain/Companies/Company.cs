@@ -4,7 +4,7 @@
     {
         public string Name { get; set; }
         public int EstablishmentYear { get; set; }
-        public List<Employee>? Employees { get; protected set; }
+        public List<Employee>? Employees { get; set; }
 
         public Company(string name, int establishmentYear)
         {

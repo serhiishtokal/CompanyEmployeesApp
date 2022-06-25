@@ -23,6 +23,7 @@ namespace CompanyEmployees.Infrastructure.EF
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(_connectionStringOptions.DefaultConnection, options => options.EnableRetryOnFailure(3));
+            optionsBuilder.LogTo(Console.WriteLine);
         }
 
         public async Task<int> SaveChangesAndCommitAsync(CancellationToken cancellationToken = default)

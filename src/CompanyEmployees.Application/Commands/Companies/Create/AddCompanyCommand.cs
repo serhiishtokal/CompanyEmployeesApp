@@ -31,6 +31,7 @@ namespace CompanyEmployeesApplication.Commands.Companies.Create
         {
             var company = _mapper.Map<Company>(request.CompanyDto);
             await _companyRepository.AddAsync(company);
+            await _companyRepository.SaveAsync();
             return company.Id;
         }
     }

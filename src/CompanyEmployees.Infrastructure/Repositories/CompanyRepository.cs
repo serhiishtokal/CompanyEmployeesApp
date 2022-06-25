@@ -1,6 +1,7 @@
 ﻿using CompanyEmployees.Domain;
 using CompanyEmployees.Domain.Repositories;
 using CompanyEmployees.Infrastructure.EF;
+using CompanyEmployees.Infrastructure.Extensions.RepositoryExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace CompanyEmployees.Infrastructure.Repositories
@@ -8,38 +9,67 @@ namespace CompanyEmployees.Infrastructure.Repositories
     internal class CompanyRepository : ICompanyRepository
     {
         private readonly AppDbContext _appDbContext;
+        private readonly DbSet<Company> _companySet;
         public CompanyRepository(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
+            _companySet = appDbContext.Set<Company>();
         }
 
         public async Task<Company> GetAsync(long id)
         {
-            var query = _appDbContext.Set<Company>().AsNoTrackingWithIdentityResolution();
-            var company = await query
-                .Include(x=>x.Employees)
+            var company = await _companySet
+                .AsNoTracking()
+                .Include(x => x.Employees)
                 .FirstOrDefaultAsync(x => x.Id == id);
             return company;
         }
 
-        public Task<IEnumerable<Company>> GetAsync(CompanyFilter companyFilter)
+        public async Task<Company> GetWithTrackingAsync(long id)
         {
-            // todo
-            throw new NotImplementedException();
+            var company = await _companySet
+                .Include(x => x.Employees)
+                .FirstOrDefaultAsync(x => x.Id == id);
+            return company;
+        }
+
+        public async Task<IEnumerable<Company>> GetAsync(CompanyFilter companyFilter)
+        {
+            // todo Optimize 
+            var companies = await _companySet.AsNoTracking()
+                .Include(x => x.Employees)
+                .FilterForKeyWord(companyFilter.Keyword)
+                .FilterForEmployeeDateOfBirth(companyFilter.EmployeeDateOfBirthFrom, companyFilter.EmployeeDateOfBirthTo)
+                .FilterForEmployeeJobTitle(companyFilter.EmployeeJobTitles)
+                .ToArrayAsync();
+
+            return companies;
         }
 
         public async Task<long> AddAsync(Company company)
         {
-            await _appDbContext.AddAsync(company);
-            await _appDbContext.SaveChangesAsync();
+            await _companySet.AddAsync(company);
             return company.Id;
         }
 
-        public async Task<long> UpdateAsync(Company company)
+        public void Update(Company company)
         {
-            _appDbContext.Update(company);
+            _companySet.Attach(company);
+            _appDbContext.Entry(company).State = EntityState.Modified;
+        }
+
+        public async Task DeleteAsync(long companyId)
+        {
+            var company = await _companySet.FirstOrDefaultAsync(x => x.Id == companyId);
+            if (company != null)
+            {
+                _companySet.Remove(company);
+            }
+        }
+
+        public async Task SaveAsync()
+        {
             await _appDbContext.SaveChangesAsync();
-            return company.Id;
         }
     }
 }

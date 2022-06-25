@@ -1,6 +1,8 @@
-﻿namespace CompanyEmployees.Domain.Repositories
+﻿using CompanyEmployees.Domain;
+
+namespace CompanyEmployees.Application.DTOs
 {
-    public class CompanyFilter
+    public class CompanyFilterDto
     {
         public string? Keyword { get; set; }
         public DateTime? EmployeeDateOfBirthFrom { get; set; }

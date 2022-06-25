@@ -32,7 +32,7 @@ namespace CompanyEmployeesApplication.Queries.Companies.Get
             var company = await _companyRepository.GetAsync(request.Id);
             if(company == null)
             {
-                throw new NotFoundException($"Company with id {request.Id} not found");
+                throw new NotFoundException(ExceptionMessages.GetCompanyNotFoundString(request.Id));
             }
             var result = _mapper.Map<CompanyDto>(company);
             return result;
