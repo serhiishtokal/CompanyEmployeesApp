@@ -6,10 +6,12 @@ using CompanyEmployees.Domain.Companies.Exceptions;
 using CompanyEmployeesApplication.Commands.Companies.Create;
 using CompanyEmployeesApplication.Queries.Companies.Get;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CompanyEmployeesApp.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class CompanyController : ControllerBase
@@ -23,6 +25,7 @@ namespace CompanyEmployeesApp.Controllers
             _mediator = mediator;
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute]long id)
         {
@@ -91,6 +94,7 @@ namespace CompanyEmployeesApp.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("search")]
         public async Task<IActionResult> Search([FromBody]CompanyFilterDto filter)
         {

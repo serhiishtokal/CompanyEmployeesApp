@@ -4,9 +4,11 @@ using Autofac.Extensions.DependencyInjection;
 using CompanyEmployees.Application.Mappers;
 using CompanyEmployees.Infrastructure;
 using CompanyEmployees.Infrastructure.Settings;
+using CompanyEmployees.WebApi.Helpers;
 using CompanyEmployeesApplication;
 using CompanyEmployeesApplication.StartupTasks;
 using MediatR.Extensions.Autofac.DependencyInjection;
+using Microsoft.AspNetCore.Authentication;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,10 +21,10 @@ builder.Services
     {
         var enumConverter = new JsonStringEnumConverter();
         opts.JsonSerializerOptions.Converters.Add(enumConverter);
-
-        //opts.SerializerSettings. = new RequiredPropertiesContractResolver();
-
     });
+
+builder.Services.AddAuthentication("BasicAuthentication")
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -53,6 +55,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
